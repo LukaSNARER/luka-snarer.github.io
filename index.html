@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>雷霆 Hello World · GitHub Pages</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2347d7ff' d='M13 2 4 14h6l-1 8 9-12h-6l1-8z'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg0:#05060e;
+    --bg1:#0a0d22;
+    --bg2:#12133a;
+    --cyan:#47d7ff;
+    --violet:#8f7bff;
+    --text:#e9ecff;
+    --muted:#9aa3c7;
+    --line:rgba(120,140,255,.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(1200px 700px at 50% -10%, rgba(71,215,255,.14), transparent 60%),
+      radial-gradient(900px 600px at 15% 110%, rgba(143,123,255,.12), transparent 60%),
+      linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg2));
+    min-height:100%;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* 细微的夜幕纹理 */
+  body::before{
+    content:"";
+    position:fixed;inset:0;pointer-events:none;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0 1px, transparent 1px 3px);
+  }
+
+  .stage{
+    position:relative;z-index:1;
+    min-height:100%;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:40px 20px 64px;
+    text-align:center;
+  }
+
+  /* 闪电 */
+  .bolt-wrap{
+    position:relative;
+    width:clamp(110px, 20vw, 180px);
+    height:clamp(150px, 26vw, 240px);
+    margin-bottom:clamp(18px, 3vw, 34px);
+    filter:drop-shadow(0 0 22px rgba(71,215,255,.75));
+  }
+  .bolt{position:absolute;inset:0;width:100%;height:100%;}
+  .bolt path{
+    fill:none;
+    stroke:var(--cyan);
+    stroke-width:1.6;
+    stroke-linejoin:round;
+    stroke-linecap:round;
+  }
+  .bolt .core{stroke:#dffbff;stroke-width:.8;}
+  .bolt .halo{opacity:.35;}
+
+  /* 闪电闪烁 */
+  .bolt-wrap.is-striking .bolt{animation:boltFlick .9s steps(1,end) both;}
+  .bolt-wrap.is-striking .bolt .glow{animation:glowPulse .9s ease-out both;}
+  @keyframes boltFlick{
+    0%,100%{opacity:1;}
+    8%{opacity:.15;}
+    16%{opacity:1;}
+    26%{opacity:.3;}
+    38%{opacity:1;}
+    50%{opacity:.6;}
+    62%{opacity:1;}
+  }
+  @keyframes glowPulse{
+    0%{opacity:0;}
+    12%{opacity:.9;}
+    30%{opacity:.3;}
+    45%{opacity:.8;}
+    100%{opacity:.4;}
+  }
+
+  /* 标题 */
+  h1{
+    font-size:clamp(46px, 9vw, 118px);
+    font-weight:800;
+    letter-spacing:.04em;
+    line-height:1.05;
+    background:linear-gradient(100deg, var(--cyan) 0%, #7de3ff 35%, var(--violet) 80%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    text-shadow:0 0 40px rgba(71,215,255,.28);
+    animation:titleGlow 3.4s ease-in-out infinite;
+  }
+  @keyframes titleGlow{
+    0%,100%{text-shadow:0 0 34px rgba(71,215,255,.20);}
+    50%{text-shadow:0 0 60px rgba(71,215,255,.45);}
+  }
+
+  .sub{
+    margin-top:clamp(14px,2.4vw,24px);
+    font-size:clamp(15px,2.2vw,20px);
+    color:var(--muted);
+    letter-spacing:.28em;
+    font-weight:500;
+  }
+
+  .meta{
+    margin-top:14px;
+    font-size:13px;
+    color:rgba(154,163,199,.7);
+    letter-spacing:.08em;
+    display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center;
+  }
+  .meta .dot{width:6px;height:6px;border-radius:50%;background:#3df5a0;box-shadow:0 0 8px #3df5a0;}
+
+  .actions{margin-top:clamp(28px,5vw,44px);display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+
+  .btn{
+    font:inherit;
+    cursor:pointer;
+    border-radius:999px;
+    padding:12px 26px;
+    font-size:15px;
+    letter-spacing:.06em;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .btn:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+  .btn-primary{
+    color:#05101a;font-weight:700;
+    background:linear-gradient(100deg,var(--cyan),#8fdcff);
+    border:1px solid rgba(71,215,255,.7);
+    box-shadow:0 6px 24px rgba(71,215,255,.35);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(71,215,255,.5);}
+  .btn-ghost{
+    color:var(--text);
+    background:transparent;
+    border:1px solid var(--line);
+  }
+  .btn-ghost:hover{background:rgba(120,140,255,.08);transform:translateY(-2px);}
+
+  .flash-note{
+    margin-top:18px;
+    font-size:13px;color:rgba(154,163,199,.85);
+    font-variant-numeric:tabular-nums;
+    height:1.4em;
+  }
+
+  footer{
+    position:absolute;left:0;right:0;bottom:22px;
+    text-align:center;
+    font-size:12px;color:rgba(154,163,199,.55);
+    letter-spacing:.06em;
+  }
+  footer code{
+    background:rgba(120,140,255,.1);
+    border:1px solid var(--line);
+    padding:2px 7px;border-radius:6px;
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .bolt-wrap.is-striking .bolt,
+    .bolt-wrap.is-striking .bolt .glow,
+    h1{animation:none;}
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="bolt-wrap" id="boltWrap">
+      <svg class="bolt" viewBox="0 0 120 160" aria-hidden="true">
+        <defs>
+          <linearGradient id="boltGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#dffbff"/>
+            <stop offset="1" stop-color="#47d7ff"/>
+          </linearGradient>
+        </defs>
+        <g class="glow">
+          <path class="halo" d="M62 6 28 84h26l-12 70 46-84H58l14-64z" stroke="url(#boltGrad)" stroke-width="7" opacity=".3"/>
+        </g>
+        <path class="core" d="M62 6 28 84h26l-12 70 46-84H58l14-64z"/>
+      </svg>
+    </div>
+
+    <h1>Hello World</h1>
+    <p class="sub">雷霆一响 · 页面已上线</p>
+    <div class="meta"><span class="dot"></span>GitHub Pages &nbsp;·&nbsp; 部署测试中</div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="strikeBtn">再来一道闪电</button>
+      <a class="btn btn-ghost" href="https://github.com" target="_blank" rel="noopener">查看 GitHub</a>
+    </div>
+    <p class="flash-note" id="flashNote"></p>
+
+    <footer>这个页面是 <code>index.html</code> · 推送到仓库后由 GitHub Pages 直接托管</footer>
+  </div>
+
+<script>
+(function(){
+  var wrap = document.getElementById('boltWrap');
+  var btn  = document.getElementById('strikeBtn');
+  var note = document.getElementById('flashNote');
+  var count = 0;
+
+  function strike(){
+    count++;
+    wrap.classList.remove('is-striking');
+    // 强制重排，让动画能再次触发
+    void wrap.offsetWidth;
+    wrap.classList.add('is-striking');
+    note.textContent = '第 ' + count + ' 道闪电落地';
+    window.clearTimeout(strike._t);
+    strike._t = window.setTimeout(function(){ note.textContent = ''; }, 1400);
+  }
+
+  btn.addEventListener('click', strike);
+  // 首次加载：让闪电亮一次
+  strike();
+})();
+</script>
+</body>
+</html>
